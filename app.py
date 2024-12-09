@@ -13,8 +13,6 @@ import os
 app = Flask(__name__)
 CORS(app)  # Enable CORS
 
-# Set the path to the HTML directory
-HTML_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'html')
 
 # ------------------- Image Processing Functionality -------------------
 
@@ -83,6 +81,7 @@ def recommend():
 
         # Perform KNN to find similar products
         distances, indices = knn.kneighbors(query_vector)
+        print(f"KNN distances: {distances}, indices: {indices}")
 
         # Get recommended product details
         recommended_products = df.iloc[indices[0]].to_dict(orient="records")
