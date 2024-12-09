@@ -1,0 +1,12 @@
+ID,Name,Category,Price (RM),Description,Image URL,Oily,Dry,Combination,Sensitive,Normal,Hyaluronic Acid,Salicylic Acid,Retinol,Niacinamide,Vitamin C
+P010,Spot Treatment Gel,acne,40,A targeted gel to treat and reduce acne spots.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,1,0,0,1,0,0,1,0,1,0
+P011,Clarifying Cleanser,acne,35,A clarifying cleanser for acne-prone skin.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,1,0,1,0,0,0,0,0,1,1
+P012,Acne Control Lotion,acne,50,A lotion to control and reduce acne flare-ups.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,0,1,0,1,0,1,0,1,0,0
+P013,Gentle Foaming Cleanser,acne,45,A lightweight cleanser that removes dirt and excess oil while soothing the skin.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,1,0,0,1,0,1,0,0,1,0
+P014,Acne Control Serum,acne,60,A serum infused with salicylic acid to treat breakouts and reduce redness.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,0,0,1,1,0,0,1,0,1,0
+P015,Oil-Free Moisturizer,acne,50,A non-greasy moisturizer that hydrates acne-prone skin without clogging pores.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,1,0,1,0,0,1,0,0,0,1
+P016,Purifying Face Mask,acne,55,A detoxifying mask that soothes irritated skin and minimizes acne scars.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,0,1,0,1,0,0,0,1,1,0
+P017,Acne Spot Treatment Cream,acne,40,A fast-acting cream that targets blemishes and prevents new breakouts.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,1,0,1,0,0,0,1,1,0,0
+P018,Clarifying Toner,acne,30,A refreshing toner that balances oil levels and minimizes pores.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,1,0,1,0,0,0,0,0,1,1
+P019,Soothing Night Gel,acne,65,A calming gel that works overnight to reduce redness and hydrate the skin.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,0,1,0,1,0,1,0,1,0,0
+P020,Revitalizing Day Cream,acne,70,A nourishing day cream that balances hydration and prevents breakouts.,https://www.svgrepo.com/show/508699/landscape-placeholder.svg,0,0,0,1,1,1,0,0,0,1

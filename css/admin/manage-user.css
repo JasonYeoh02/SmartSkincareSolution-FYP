@@ -1,0 +1,312 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Header Styling */
+header.admin-header {
+    background-color: #004d40;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header.admin-header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+header.admin-header nav ul li a,
+#logout-btn {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+header.admin-header nav ul li a.active {
+    text-decoration: underline;
+}
+
+/* Main Section Styling */
+main {
+    padding: 20px;
+}
+
+/* User List Section */
+.users-list {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.users-list h2 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: #004d40;
+}
+
+/* User Table Styling */
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.users-table th,
+.users-table td {
+    padding: 15px;
+    text-align: center;
+}
+
+.users-table th {
+    background-color: #004d40;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.users-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.users-table tr:nth-child(odd) {
+    background-color: #e8f5e9;
+}
+
+.users-table tr:hover {
+    background-color: #d7e8dc;
+    transition: background-color 0.3s ease;
+}
+
+.users-table td {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Filter Section Styling */
+.filter-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.filter-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #004d40;
+    border-radius: 5px;
+    outline: none;
+}
+
+.filter-btn {
+    background-color: #004d40;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.filter-btn:hover {
+    background-color: #00695c;
+}
+
+#no-results-message {
+    font-size: 16px;
+    margin-top: 20px;
+    color: red;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 600px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+    text-align: left;
+    font-family: Arial, sans-serif;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #004d40;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-modal-btn:hover {
+    color: #000;
+}
+
+.modal-body {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px 20px;
+    margin-bottom: 20px;
+}
+
+.modal-body div {
+    margin-bottom: 15px;
+}
+
+.modal-body strong {
+    font-weight: bold;
+    color: #004d40;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.confirm-button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.confirm-button:hover {
+    background-color: #45a049;
+    box-shadow: 0 0 5px rgba(69, 160, 73, 0.5);
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.cancel-button:hover {
+    background-color: #b02a37;
+    box-shadow: 0 0 5px rgba(176, 42, 55, 0.5);
+}
+
+/* Dropdown Styling */
+.users-list table select {
+    padding: 8px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #004d40;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #004d40;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    appearance: none;
+    text-align-last: center;
+}
+
+.users-list table select:hover {
+    border-color: #00695c;
+    background-color: #f1f1f1;
+    box-shadow: 0 0 5px rgba(0, 77, 64, 0.5);
+}
+
+.users-list table select:focus {
+    border-color: #45a049;
+    box-shadow: 0 0 5px rgba(69, 160, 73, 0.5);
+}
+
+/* Action Buttons Styling */
+.view-btn,
+.delete-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+/* View Button */
+.view-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+.view-btn:hover {
+    background-color: #45a049;
+    box-shadow: 0 0 5px rgba(69, 160, 73, 0.5);
+}
+
+/* Delete Button */
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #b02a37;
+    box-shadow: 0 0 5px rgba(176, 42, 55, 0.5);
+}
+
+/* Buttons Alignment */
+.users-list table td button {
+    margin: 0 5px;
+    display: inline-block;
+}

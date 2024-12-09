@@ -1,0 +1,181 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; /* Prevents unwanted scrolling */
+}
+
+/* Fade-in Animation for Registration Box */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.register-box {
+    background-color: #fff;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 800px; /* Set a wider max width */
+    text-align: center;
+    animation: fadeIn 0.8s ease-out; /* Apply fade-in effect */
+}
+
+.register-box h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #004d40;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Two-Column Form Layout */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px; /* Spacing between columns */
+    margin-bottom: 20px;
+}
+
+/* Input Styles with Focus Effect */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.1em;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #00bcd4;
+    box-shadow: 0 0 8px rgba(0, 188, 212, 0.3); /* Highlight effect on focus */
+}
+
+/* Checkbox Style */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.checkbox-group label {
+    font-size: 0.9em;
+    color: #333;
+}
+
+/* Register Button with Hover and Active Animation */
+.register-btn {
+    background-color: #00bcd4;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.register-btn:hover {
+    background-color: #0097a7;
+    transform: scale(1.02); /* Slight scale up on hover */
+}
+
+.register-btn:active {
+    transform: scale(0.98); /* Slight scale down on click */
+}
+
+/* Back Button with Hover and Active Animation */
+.back-btn {
+    display: inline-block;
+    background-color: #0097a7;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.back-btn:hover {
+    background-color: #007b8a;
+    transform: scale(1.02); /* Slight scale up on hover */
+}
+
+.back-btn:active {
+    transform: scale(0.98); /* Slight scale down on click */
+}
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #4CAF50; /* Default success background */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: fadeInOut 3s ease-in-out forwards;
+    z-index: 1000;
+}
+
+.notification.error {
+    background-color: #f44336; /* Error background color */
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0; }
+    10%, 90% { opacity: 1; }
+}

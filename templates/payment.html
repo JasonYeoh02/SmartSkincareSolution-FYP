@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="/css/payment.css">
+</head>
+<body>
+
+    <!-- Payment Page Header -->
+    <header class="payment-header">
+        <h1>Complete Your Payment</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="payment-container">
+        <!-- Order Summary Section -->
+        <section class="order-summary">
+            <h3>Order Summary</h3>
+            <p><strong>Subtotal:</strong> <span id="subtotal">RM 0.00</span></p>
+            <p><strong>Shipping Fee:</strong> <span id="shipping-fee">RM 0.00</span></p>
+            <p><strong>Tax:</strong> <span id="tax-amount">RM 0.00</span></p>
+            <p><strong>Total:</strong> <span id="grand-total">RM 0.00</span></p>
+  
+            
+        </section>
+
+        <!-- Payment Details Section -->
+        <section class="payment-details">
+            <h3>Payment Details</h3>
+            <form id="payment-form">
+                <label for="card-holder-name">Card Holder Name</label>
+                <input type="text" id="card-holder-name" name="card-holder-name" readonly />
+        
+                <label for="card-number">Card Number</label>
+                <input type="text" id="card-number" name="card-number" readonly />
+        
+                <label for="expiry-date">Expiry Date</label>
+                <input type="text" id="expiry-date" name="expiry-date" readonly />
+        
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv" readonly />
+
+                <div class="confirm-box">
+                    <p>Please confirm that the above details are correct before proceeding with payment.</p>
+                </div>
+        
+                <button type="submit" id="pay-now-button">Pay Now</button>
+                <button type="button" id="back-to-cart" class="back-to-cart-button">Back to Cart</button>
+            </form>
+        </section>        
+    </main>
+
+   <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Confirm Payment</h3>
+            <p>Are you sure you want to proceed with the payment?</p>
+            <div class="modal-actions">
+                <button id="confirm-payment" class="confirm-button">Confirm</button>
+                <button id="cancel-payment" class="cancel-button">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/payment.js" type="module"></script>
+</body>
+</html>

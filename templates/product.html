@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Smart Skincare Solution</title>
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/product.css">
+    <script defer src="/js/product.js" type="module"></script>
+</head>
+<body>
+    
+    <!-- Header Section -->
+    <header class="main-header">
+        <nav>
+            <div class="logo">Smart Skincare Solution</div>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="product.html">Products</a></li>
+                <li><a href="appointment.html">Appointment</a></li>
+                <li><a href="skin-analysis.html">Technology</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <!-- Profile with Dropdown -->
+                <li class="profile-dropdown">
+                    <a href="#" id="profile-link">Profile</a>
+                    <div class="dropdown-content">
+                        <a href="profile.html">View Profile</a>
+                        <a href="purchase-history.html">Purchase History</a>
+                        <a href="cart.html">My Carts</a>
+                        <a href="login.html" id="logout-btn">Logout</a>
+                    </div>
+                </li>
+                <!-- Username Display -->
+                <li><span id="user-info">Welcome, User</span></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search and Filter Section -->
+    <section class="search-filter-section">
+        <input type="text" id="search-bar" placeholder="Search for products..." onkeyup="searchProducts()">
+        <select id="filter-category" onchange="filterProducts()">
+            <option value="all">All Categories</option>
+            <option value="serum">Serum</option>
+            <option value="moisturizer">Moisturizer</option>
+            <option value="anti-aging">Anti-Aging</option>
+            <option value="acne">Acne</option>
+        </select>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <h2>Our Products</h2>
+        <div class="product-grid" id="product-grid">
+            <!-- Products will be loaded here dynamically -->
+        </div>
+    </section>
+
+    <!-- Quantity Modal -->
+    <div id="quantity-modal" style="display: none;" class="modal">
+        <div class="modal-content">
+            <h3>Select Quantity</h3>
+            <p id="modal-product-name"></p>
+            <div class="quantity-controls">
+                <button onclick="changeQuantity(-1)">-</button>
+                <input type="number" id="modal-quantity" value="1" min="1" style="width: 50px;">
+                <button onclick="changeQuantity(1)">+</button>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-add-to-cart" onclick="confirmAddToCart()">Add to Cart</button>
+                <button id="cancel-button" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Smart Skincare Solution. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Include Firebase Config and Home Script -->
+    <script src="/js/firebase-config.js" type="module"></script>
+    <script src="/js/home.js" type="module"></script>
+</body>
+</html>

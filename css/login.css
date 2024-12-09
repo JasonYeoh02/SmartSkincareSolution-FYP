@@ -1,0 +1,172 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Login Container Styling */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.login-box {
+    background-color: #fff;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px; /* Adjusted to a more comfortable width */
+    text-align: center;
+    animation: slideIn 0.5s ease-out; /* Slide-in effect for the whole box */
+}
+
+/* Title Styling */
+.login-box h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #004d40;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Input Group Styling */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+    animation: fadeIn 0.4s ease-in; /* Fade-in effect for each input group */
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.1em;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    animation: inputSlideIn 0.6s ease-out; /* Slide-in effect for inputs */
+}
+
+.input-group input:focus {
+    border-color: #00bcd4;
+    box-shadow: 0px 0px 8px rgba(0, 188, 212, 0.3);
+}
+
+/* Checkbox Group Styling */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.checkbox-group label {
+    font-size: 0.9em;
+    color: #333;
+}
+
+/* Button Styling */
+.login-btn {
+    background-color: #00bcd4;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #0097a7;
+}
+
+/* Error Message Styling */
+.error-message {
+    color: #d32f2f;
+    background-color: #fdecea;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    display: none; /* Initially hidden */
+    text-align: left;
+}
+
+/* Extra Links Styling */
+.extras {
+    margin-top: 20px;
+}
+
+.forgot-password, .sign-up {
+    color: #00bcd4;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.forgot-password:hover, .sign-up:hover {
+    text-decoration: underline;
+}
+
+.sign-up {
+    font-weight: bold;
+}
+
+/* Slide-in Animation for Login Box */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade-in Animation for Input Groups */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Slide-in Animation for Input Fields */
+@keyframes inputSlideIn {
+    from {
+        transform: translateX(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
