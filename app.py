@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
-from flask import Flask, render_template
+from flask import render_template
 import os
 
 app = Flask(__name__)
