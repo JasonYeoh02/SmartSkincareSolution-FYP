@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="../../css/admin/manage-user.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="admin-header">
+        <h1>Manage Users</h1>
+        <nav>
+            <ul>
+                <li><a href="admin-dashboard.html">Dashboard</a></li>
+                <li><a href="manage-products.html">Manage Products</a></li>
+                <li><a href="manage-user.html">Manage Users</a></li>
+                <li><a href="manage-appointment.html">Manage Appointment</a></li>
+                <li><a href="order-management.html">Order Management</a></li>
+                <li><button id="logout-btn" class="logout-btn">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Quick Stats Section -->
+        <section id="quick-stats">
+            <h3>User Statistics</h3>
+            <p id="stats">Total Users: 0 | Active Users: 0 | Inactive Users: 0</p>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <h3>Filters</h3>
+            <div class="filters">
+                <input type="text" id="search-bar" class="filter-input" placeholder="Search by username or email...">
+                <select id="membership-filter" class="filter-input">
+                    <option value="">All Membership Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+                <button id="apply-filters" class="filter-btn">Apply Filters</button>
+            </div>
+        </section>
+
+        <!-- Users List Table -->
+        <section class="users-list">
+            <h2>User List</h2>
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Country</th>
+                        <th>Membership Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body">
+                    <!-- Dynamic User Rows -->
+                </tbody>
+            </table>
+            <p id="no-results-message" style="display: none; text-align: center; color: red;">No users match your search criteria.</p>
+        </section>        
+
+        <!-- View User Modal -->
+        <div id="view-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>User Shipping Details</h2>
+                    <button id="close-modal-btn" class="close-modal-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <strong>Username:</strong>
+                        <span id="username-display">Yeoh</span>
+                    </div>
+                    <div>
+                        <strong>Email:</strong>
+                        <span id="email-display">yeoh@gmail.com</span>
+                    </div>
+                    <div>
+                        <strong>Contact:</strong>
+                        <span id="contact-display">0123456789</span>
+                    </div>
+                    <div class="section-divider"></div>
+                    <div>
+                        <strong>Address:</strong>
+                        <span id="address-display">1-2-33 Lengkok Nipah Taman Lip Sin</span>
+                    </div>
+                    <div>
+                        <strong>City:</strong>
+                        <span id="city-display">Bayan Lepas</span>
+                    </div>
+                    <div>
+                        <strong>Postal Code:</strong>
+                        <span id="postal-display">11900</span>
+                    </div>
+                    <div>
+                        <strong>Country:</strong>
+                        <span id="country-display">Malaysia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div id="delete-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Delete User</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this user?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm-delete-btn" class="delete-button">Delete</button>
+                    <button id="cancel-delete-btn" class="cancel-button">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Membership Status Confirmation Modal -->
+        <div id="status-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Change Membership Status</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to change the membership status to <span id="new-status-display"></span>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm-status-btn" class="confirm-button">Confirm</button>
+                    <button id="cancel-status-btn" class="cancel-button">Cancel</button>
+                </div>
+            </div>
+        </div>        
+    </main>
+
+    <!-- JavaScript -->
+    <script src="/js/firebase-config.js" type="module"></script>
+    <script src="../../js/admin/manage-user.js" type="module"></script>
+</body>
+</html>
