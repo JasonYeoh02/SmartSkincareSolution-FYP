@@ -1,12 +1,17 @@
 import { auth } from "./firebase-config.js";
-import { EmailAuthProvider, reauthenticateWithCredential, updateEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import {
+    onAuthStateChanged,
+    EmailAuthProvider,
+    reauthenticateWithCredential,
+    updateEmail
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import {
     getFirestore,
     doc,
     getDoc,
     updateDoc,
     collection,
     getDocs,
-    onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 // Firestore initialization
@@ -133,165 +138,35 @@ async function saveChanges(section) {
         if (contact) updatedData.contact = contact;
 
         try {
-            // If the email is updated, re-authenticate the user first
             if (email && email !== user.email) {
-                const currentPassword = prompt("Please enter your current password to update the email:");
-                if (!currentPassword) {
-                    showToast("Email update canceled.", true);
-                    return;
-                }
-
-                // Re-authenticate the user
-                const credential = EmailAuthProvider.credential(user.email, currentPassword);
-                await reauthenticateWithCredential(user, credential);
-
-                // Update the email
+                // Update email in Firebase Authentication
                 await updateEmail(user, email);
-                updatedData.email = email; // Update Firestore with the new email
+                updatedData.email = email; // Update Firestore email
             }
 
-            // Update Firestore data
             await updateDoc(userRef, updatedData);
-            showToast("Profile updated successfully!");
+            showToast(`${section} information saved successfully!`);
+            hideModal(`${section}-modal`);
+            loadUserProfile(); // Refresh profile data after saving
         } catch (error) {
             console.error("Error updating profile:", error);
-            showToast(`Failed to update profile: ${error.message}`, true);
-        }
-
-    } else if (section === "shipping") {
-        const address = document.getElementById("modal-address").value.trim();
-        const city = document.getElementById("modal-city").value.trim();
-        const postalCode = document.getElementById("modal-postal-code").value.trim();
-        const country = document.getElementById("modal-country").value.trim();
-
-        if (address) updatedData.address = address;
-        if (city) updatedData.city = city;
-        if (postalCode) updatedData.postalCode = postalCode;
-        if (country) updatedData.country = country;
-
-        try {
-            await updateDoc(userRef, updatedData);
-            showToast("Shipping information saved successfully!");
-        } catch (error) {
-            console.error("Error updating shipping information:", error);
             showToast("Failed to save changes. Please try again.", true);
         }
-
-    } else if (section === "billing") {
-        const cardHolderName = document.getElementById("modal-card-holder").value.trim();
-        const cardNumber = document.getElementById("modal-card-number").value.trim();
-        const expiry = document.getElementById("modal-expiry").value.trim();
-        const cvv = document.getElementById("modal-cvv").value.trim();
-
-        if (!validateCardNumber(cardNumber)) {
-            showToast("Invalid card number. It should be 16 digits.", true);
-            return;
-        }
-
-        if (!validateCVV(cvv)) {
-            showToast("Invalid CVV. It should be 3-4 digits.", true);
-            return;
-        }
-
-        updatedData.billingCard = { cardHolderName, cardNumber, expiry, cvv };
     }
 
-    try {
-        await updateDoc(userRef, updatedData);
-        showToast(`${section} information saved successfully!`);
-        hideModal(`${section}-modal`);
-        loadUserProfile(); // Refresh profile data after saving
-    } catch (error) {
-        console.error("Error updating document:", error);
-        showToast("Failed to save changes. Please try again.", true);
-    }
+    // Additional logic for shipping and billing can be added here as needed
 }
 
-// Show the billing modal for adding/editing a card
-function showBillingModal(isEdit = false) {
-    const user = auth.currentUser;
-    if (!user) return;
-
-    if (isEdit) {
-        const userRef = doc(db, "users", user.uid);
-        getDoc(userRef).then((docSnap) => {
-            if (docSnap.exists()) {
-                const card = docSnap.data().billingCard;
-                if (card) {
-                    document.getElementById("modal-card-holder").value = card.cardHolderName || "";
-                    document.getElementById("modal-card-number").value = card.cardNumber || "";
-                    document.getElementById("modal-expiry").value = card.expiry || "";
-                    document.getElementById("modal-cvv").value = card.cvv || "";
-                }
-            }
-        }).catch((error) => {
-            console.error("Error fetching billing data:", error);
-            showToast("Failed to load billing information. Please try again.", true);
-        });
-    } else {
-        // Clear fields for new entry
-        document.getElementById("modal-card-holder").value = "";
-        document.getElementById("modal-card-number").value = "";
-        document.getElementById("modal-expiry").value = "";
-        document.getElementById("modal-cvv").value = "";
-    }
-    showModal("billing-modal");
-}
-
-window.showBillingModal = showBillingModal; // Attach to the global window object
+// Attach functions to the global window object
 window.saveChanges = saveChanges;
 window.showModal = showModal;
 window.hideModal = hideModal;
 
-async function loadUserAppointments() {
-    const user = auth.currentUser;
-    if (!user) {
-        console.error("No user logged in.");
-        return;
-    }
-
-    const appointmentsRef = collection(db, "appointments");
-    const querySnapshot = await getDocs(appointmentsRef);
-
-    const userAppointments = querySnapshot.docs
-        .filter((doc) => doc.data().user.email === user.email)
-        .map((doc) => doc.data());
-
-    const appointmentsContent = document.getElementById("appointments-content");
-
-    if (userAppointments.length === 0) {
-        appointmentsContent.innerHTML = `
-            <p class="no-appointments">You don't have any appointments yet.</p>
-            <div class="booking-link">
-                <a href="appointment.html">Book one now!</a>
-            </div>`;
-        return;
-    }
-
-    // Clear any previous content
-    appointmentsContent.innerHTML = "";
-
-    // Create cards for each appointment
-    userAppointments.forEach((appointment) => {
-        const appointmentCard = document.createElement("div");
-        appointmentCard.classList.add("appointment-card");
-
-        appointmentCard.innerHTML = `
-            <p><strong>Date:</strong> ${appointment.date}</p>
-            <p><strong>Time:</strong> ${appointment.time}</p>
-            <p><strong>Status:</strong> ${appointment.status}</p>
-        `;
-
-        appointmentsContent.appendChild(appointmentCard);
-    });
-}
-
+// Monitor auth state and initialize display
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        loadUserProfile(); // Load user profile
-        loadUserAppointments(); // Load appointments for the logged-in user
+        loadUserProfile();
     } else {
-        window.location.href = "/html/login.html"; // Redirect to login if not logged in
+        window.location.href = "/html/login.html";
     }
 });
-
