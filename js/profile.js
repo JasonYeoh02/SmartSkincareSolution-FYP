@@ -7,6 +7,9 @@ import {
     updateDoc,
     collection,
     getDocs,
+    updateEmail,
+    EmailAuthProvider,
+    reauthenticateWithCredential,
   } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";  
 
 // Firestore initialization
@@ -252,6 +255,50 @@ async function loadUserAppointments() {
         appointmentsContent.appendChild(appointmentCard);
     });
 }
+async function updateUserEmail() {
+    const user = auth.currentUser;
+    if (!user) {
+        alert("No user is logged in.");
+        return;
+    }
+
+    // Get new email and current password from the form
+    const newEmail = document.getElementById("new-email").value.trim();
+    const currentPassword = document.getElementById("current-password").value.trim();
+
+    if (!newEmail || !currentPassword) {
+        alert("Please enter both your new email and current password.");
+        return;
+    }
+
+    try {
+        // Re-authenticate the user
+        const credential = EmailAuthProvider.credential(user.email, currentPassword);
+        await reauthenticateWithCredential(user, credential);
+
+        // Update email in Firebase Authentication
+        await updateEmail(user, newEmail);
+        console.log("Email updated in Firebase Authentication.");
+
+        // Update email in Firestore
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, { email: newEmail });
+        console.log("Email updated in Firestore.");
+
+        alert("Email updated successfully.");
+        // Optional: Redirect or reload the profile page
+        window.location.reload();
+    } catch (error) {
+        console.error("Error updating email:", error);
+        alert("Failed to update email. Please try again.");
+    }
+}
+
+// Attach the function to the form submission
+document.getElementById("update-email-form").addEventListener("submit", (e) => {
+    e.preventDefault(); // Prevent default form submission
+    updateUserEmail();
+});
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
