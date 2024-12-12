@@ -1,12 +1,12 @@
 import { auth } from "./firebase-config.js";
-import { onAuthStateChanged, updateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import {
+import { EmailAuthProvider, reauthenticateWithCredential, updateEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
     getFirestore,
     doc,
     getDoc,
     updateDoc,
     collection,
     getDocs,
+    onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 // Firestore initialization
@@ -130,26 +130,33 @@ async function saveChanges(section) {
         }
 
         if (username) updatedData.username = username;
-        if (email) {
-            updatedData.email = email;
-            try {
-                // Re-authenticate the user before updating the email
-                const currentPassword = prompt("Please enter your current password to confirm email change:");
-                if (currentPassword) {
-                    const credential = EmailAuthProvider.credential(user.email, currentPassword);
-                    await reauthenticateWithCredential(user, credential);
-                    await updateEmail(user, email);
-                } else {
-                    showToast("Email update canceled. Current password is required.", true);
+        if (contact) updatedData.contact = contact;
+
+        try {
+            // If the email is updated, re-authenticate the user first
+            if (email && email !== user.email) {
+                const currentPassword = prompt("Please enter your current password to update the email:");
+                if (!currentPassword) {
+                    showToast("Email update canceled.", true);
                     return;
                 }
-            } catch (error) {
-                console.error("Error updating email:", error);
-                showToast("Failed to update email. Please try again.", true);
-                return;
+
+                // Re-authenticate the user
+                const credential = EmailAuthProvider.credential(user.email, currentPassword);
+                await reauthenticateWithCredential(user, credential);
+
+                // Update the email
+                await updateEmail(user, email);
+                updatedData.email = email; // Update Firestore with the new email
             }
+
+            // Update Firestore data
+            await updateDoc(userRef, updatedData);
+            showToast("Profile updated successfully!");
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            showToast(`Failed to update profile: ${error.message}`, true);
         }
-        if (contact) updatedData.contact = contact;
 
     } else if (section === "shipping") {
         const address = document.getElementById("modal-address").value.trim();
@@ -161,6 +168,14 @@ async function saveChanges(section) {
         if (city) updatedData.city = city;
         if (postalCode) updatedData.postalCode = postalCode;
         if (country) updatedData.country = country;
+
+        try {
+            await updateDoc(userRef, updatedData);
+            showToast("Shipping information saved successfully!");
+        } catch (error) {
+            console.error("Error updating shipping information:", error);
+            showToast("Failed to save changes. Please try again.", true);
+        }
 
     } else if (section === "billing") {
         const cardHolderName = document.getElementById("modal-card-holder").value.trim();
