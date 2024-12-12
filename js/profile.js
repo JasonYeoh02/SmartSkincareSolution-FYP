@@ -8,7 +8,6 @@ import {
     collection,
     getDocs,
   } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";  
-import { EmailAuthProvider, updateEmail, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 // Firestore initialization
 const db = getFirestore();
@@ -131,9 +130,24 @@ async function saveChanges(section) {
         }
 
         if (username) updatedData.username = username;
-        if (email) updatedData.email = email;
         if (contact) updatedData.contact = contact;
 
+        try {
+            // Update the email in Firebase Authentication
+            if (email && email !== user.email) {
+                await user.updateEmail(email);
+                updatedData.email = email; // Update Firestore with the new email
+            }
+
+            // Update Firestore
+            await updateDoc(userRef, updatedData);
+            showToast("Profile updated successfully!");
+            hideModal("profile-modal");
+            loadUserProfile(); // Refresh profile data
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            showToast("Failed to update profile. Please try again.", true);
+        }
     } else if (section === "shipping") {
         const address = document.getElementById("modal-address").value.trim();
         const city = document.getElementById("modal-city").value.trim();
@@ -145,6 +159,14 @@ async function saveChanges(section) {
         if (postalCode) updatedData.postalCode = postalCode;
         if (country) updatedData.country = country;
 
+        try {
+            await updateDoc(userRef, updatedData);
+            showToast("Shipping details updated successfully!");
+            hideModal("shipping-modal");
+        } catch (error) {
+            console.error("Error updating shipping details:", error);
+            showToast("Failed to update shipping details. Please try again.", true);
+        }
     } else if (section === "billing") {
         const cardHolderName = document.getElementById("modal-card-holder").value.trim();
         const cardNumber = document.getElementById("modal-card-number").value.trim();
@@ -162,16 +184,15 @@ async function saveChanges(section) {
         }
 
         updatedData.billingCard = { cardHolderName, cardNumber, expiry, cvv };
-    }
 
-    try {
-        await updateDoc(userRef, updatedData);
-        showToast(`${section} information saved successfully!`);
-        hideModal(`${section}-modal`);
-        loadUserProfile(); // Refresh profile data after saving
-    } catch (error) {
-        console.error("Error updating document:", error);
-        showToast("Failed to save changes. Please try again.", true);
+        try {
+            await updateDoc(userRef, updatedData);
+            showToast("Billing details updated successfully!");
+            hideModal("billing-modal");
+        } catch (error) {
+            console.error("Error updating billing details:", error);
+            showToast("Failed to update billing details. Please try again.", true);
+        }
     }
 }
 
@@ -253,50 +274,6 @@ async function loadUserAppointments() {
         appointmentsContent.appendChild(appointmentCard);
     });
 }
-async function updateUserEmail() {
-    const user = auth.currentUser;
-    if (!user) {
-        alert("No user is logged in.");
-        return;
-    }
-
-    // Get new email and current password from the form
-    const newEmail = document.getElementById("new-email").value.trim();
-    const currentPassword = document.getElementById("current-password").value.trim();
-
-    if (!newEmail || !currentPassword) {
-        alert("Please enter both your new email and current password.");
-        return;
-    }
-
-    try {
-        // Re-authenticate the user
-        const credential = EmailAuthProvider.credential(user.email, currentPassword);
-        await reauthenticateWithCredential(user, credential);
-
-        // Update email in Firebase Authentication
-        await updateEmail(user, newEmail);
-        console.log("Email updated in Firebase Authentication.");
-
-        // Update email in Firestore
-        const userRef = doc(db, "users", user.uid);
-        await updateDoc(userRef, { email: newEmail });
-        console.log("Email updated in Firestore.");
-
-        alert("Email updated successfully.");
-        // Optional: Redirect or reload the profile page
-        window.location.reload();
-    } catch (error) {
-        console.error("Error updating email:", error);
-        alert("Failed to update email. Please try again.");
-    }
-}
-
-// Attach the function to the form submission
-document.getElementById("update-email-form").addEventListener("submit", (e) => {
-    e.preventDefault(); // Prevent default form submission
-    updateUserEmail();
-});
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
