@@ -114,27 +114,22 @@ async function saveChanges(section) {
     const userRef = doc(db, "users", user.uid);
     const updatedData = {};
 
-    if (section === "profile") {
-        const username = document.getElementById("modal-username").value.trim();
-        const email = document.getElementById("modal-email").value.trim();
-        const contact = document.getElementById("modal-contact").value.trim();
-
-        if (email && email !== user.email) {
+           if (email && email !== user.email) {
             try {
-                // Force update the email without verification
+                // Reauthenticate the user
+                const credential = EmailAuthProvider.credential(user.email, "demo-password"); // Replace "demo-password" with the user's password or a placeholder for the demo.
+                await reauthenticateWithCredential(user, credential);
+        
+                // Update the email
                 await updateEmail(user, email);
         
-                // Update the email in Firestore immediately
+                // Update the email in Firestore
                 await updateDoc(userRef, { email });
         
-                showToast("Email successfully updated.", false);
+                showToast("Email updated successfully!", false);
             } catch (error) {
                 console.error("Error updating email:", error);
-                if (error.code === "auth/requires-recent-login") {
-                    showToast("Please log in again to update your email.", true);
-                } else {
-                    showToast("Failed to update email. Please try again.", true);
-                }
+                showToast("Failed to update email. Please try again.", true);
                 return;
             }
         }
