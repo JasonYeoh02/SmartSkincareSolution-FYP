@@ -123,7 +123,7 @@ async function saveChanges(section) {
         if (email && email !== user.email) {
             try {
                 // Prompt for reauthentication (use a demo password if necessary)
-                const currentPassword = prompt("Please enter your current password for reauthentication (demo-password for demo):");
+                const currentPassword = prompt("Please enter your current password for reauthentication:");
                 const credential = EmailAuthProvider.credential(user.email, currentPassword);
                 await reauthenticateWithCredential(user, credential);
 
