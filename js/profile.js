@@ -10,7 +10,7 @@ import {
     updateEmail,
     reauthenticateWithCredential,
   } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";  
-import { EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { auth, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 // Firestore initialization
 const db = getFirestore();
