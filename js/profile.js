@@ -121,12 +121,23 @@ async function saveChanges(section) {
 
         if (email && email !== user.email) {
             try {
-                await updateEmail(user, email); // Correct way to update the email
-                await user.sendEmailVerification(); // Send verification email
-                showToast("Email updated! Please verify the new email.", false);
+                // Update the email
+                await updateEmail(user, email);
+        
+                // Send a verification email for the new email
+                await user.sendEmailVerification();
+        
+                // Update the email in Firestore
+                await updateDoc(userRef, { email });
+        
+                showToast("Email updated! Please verify the new email address.", false);
             } catch (error) {
-                console.error("Error updating email:", error);
-                showToast("Failed to update email. Please try again.", true);
+                if (error.code === "auth/requires-recent-login") {
+                    showToast("Please log in again to update your email.", true);
+                } else {
+                    console.error("Error updating email:", error);
+                    showToast("Failed to update email. Please try again.", true);
+                }
                 return;
             }
         }
