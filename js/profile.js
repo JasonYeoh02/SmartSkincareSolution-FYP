@@ -125,7 +125,7 @@ async function saveChanges(section) {
         }
 
         if (contact && !validatePhoneNumber(contact)) {
-            showToast("Invalid phone number. It should be 10-15 digits.", true);
+            showToast("Invalid phone number. It should be 10-11 digits.", true);
             return;
         }
 
