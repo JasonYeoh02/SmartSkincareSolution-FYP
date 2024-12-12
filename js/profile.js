@@ -1,5 +1,5 @@
 import { auth } from "./firebase-config.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { onAuthStateChanged, updateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
     getFirestore,
     doc,
@@ -7,7 +7,7 @@ import {
     updateDoc,
     collection,
     getDocs,
-  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";  
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 // Firestore initialization
 const db = getFirestore();
@@ -130,24 +130,27 @@ async function saveChanges(section) {
         }
 
         if (username) updatedData.username = username;
+        if (email) {
+            updatedData.email = email;
+            try {
+                // Re-authenticate the user before updating the email
+                const currentPassword = prompt("Please enter your current password to confirm email change:");
+                if (currentPassword) {
+                    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+                    await reauthenticateWithCredential(user, credential);
+                    await updateEmail(user, email);
+                } else {
+                    showToast("Email update canceled. Current password is required.", true);
+                    return;
+                }
+            } catch (error) {
+                console.error("Error updating email:", error);
+                showToast("Failed to update email. Please try again.", true);
+                return;
+            }
+        }
         if (contact) updatedData.contact = contact;
 
-        try {
-            // Update the email in Firebase Authentication
-            if (email && email !== user.email) {
-                await user.updateEmail(email);
-                updatedData.email = email; // Update Firestore with the new email
-            }
-
-            // Update Firestore
-            await updateDoc(userRef, updatedData);
-            showToast("Profile updated successfully!");
-            hideModal("profile-modal");
-            loadUserProfile(); // Refresh profile data
-        } catch (error) {
-            console.error("Error updating profile:", error);
-            showToast("Failed to update profile. Please try again.", true);
-        }
     } else if (section === "shipping") {
         const address = document.getElementById("modal-address").value.trim();
         const city = document.getElementById("modal-city").value.trim();
@@ -159,14 +162,6 @@ async function saveChanges(section) {
         if (postalCode) updatedData.postalCode = postalCode;
         if (country) updatedData.country = country;
 
-        try {
-            await updateDoc(userRef, updatedData);
-            showToast("Shipping details updated successfully!");
-            hideModal("shipping-modal");
-        } catch (error) {
-            console.error("Error updating shipping details:", error);
-            showToast("Failed to update shipping details. Please try again.", true);
-        }
     } else if (section === "billing") {
         const cardHolderName = document.getElementById("modal-card-holder").value.trim();
         const cardNumber = document.getElementById("modal-card-number").value.trim();
@@ -184,15 +179,16 @@ async function saveChanges(section) {
         }
 
         updatedData.billingCard = { cardHolderName, cardNumber, expiry, cvv };
+    }
 
-        try {
-            await updateDoc(userRef, updatedData);
-            showToast("Billing details updated successfully!");
-            hideModal("billing-modal");
-        } catch (error) {
-            console.error("Error updating billing details:", error);
-            showToast("Failed to update billing details. Please try again.", true);
-        }
+    try {
+        await updateDoc(userRef, updatedData);
+        showToast(`${section} information saved successfully!`);
+        hideModal(`${section}-modal`);
+        loadUserProfile(); // Refresh profile data after saving
+    } catch (error) {
+        console.error("Error updating document:", error);
+        showToast("Failed to save changes. Please try again.", true);
     }
 }
 
@@ -283,3 +279,4 @@ onAuthStateChanged(auth, (user) => {
         window.location.href = "/html/login.html"; // Redirect to login if not logged in
     }
 });
+
