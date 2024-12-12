@@ -129,7 +129,11 @@ async function saveChanges(section) {
                 // Update the Firestore record
                 await updateDoc(userRef, { email });
         
-                showToast("Email updated successfully!", false);
+                // Force re-sign-in for synchronization (using fake credentials since this is a demo)
+                await auth.signOut();
+                await auth.signInWithEmailAndPassword(email, 'demo-password');
+        
+                showToast("Email updated and re-synced successfully!", false);
             } catch (error) {
                 console.error("Error updating email:", error);
                 showToast("Failed to update email in Firebase Authentication. Please try again.", true);
