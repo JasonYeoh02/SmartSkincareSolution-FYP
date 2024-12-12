@@ -121,16 +121,16 @@ async function saveChanges(section) {
 
         if (email && email !== user.email) {
             try {
-                // Update email without requiring verification
+                // Update the email in Firebase Authentication
                 await updateEmail(user, email);
         
-                // Update the Firestore record to sync with the new email
+                // Update the Firestore record
                 await updateDoc(userRef, { email });
         
                 showToast("Email updated successfully!", false);
             } catch (error) {
                 console.error("Error updating email:", error);
-                showToast("Failed to update email. Please try again.", true);
+                showToast("Failed to update email in Firebase Authentication. Please try again.", true);
             }
         }
 
