@@ -133,23 +133,71 @@ async function saveChanges(section) {
         if (contact) updatedData.contact = contact;
 
         try {
+            // Update Firestore data first
+            await updateDoc(userRef, updatedData);
+
+            // Update email only if it's different from the current email
             if (email && email !== user.email) {
-                // Update email in Firebase Authentication
-                await updateEmail(user, email);
-                updatedData.email = email; // Update Firestore email
+                await user.updateEmail(email); // Update email in Firebase Auth
+                await user.sendEmailVerification(); // Send verification email to the new email address
+                showToast("Email updated! Please verify the new email.", false);
             }
 
-            await updateDoc(userRef, updatedData);
-            showToast(`${section} information saved successfully!`);
-            hideModal(`${section}-modal`);
+            showToast("Profile updated successfully!", false);
+            hideModal("profile-modal");
             loadUserProfile(); // Refresh profile data after saving
         } catch (error) {
             console.error("Error updating profile:", error);
-            showToast("Failed to save changes. Please try again.", true);
+            showToast("Failed to update profile. Please try again.", true);
+        }
+    } else if (section === "shipping") {
+        const address = document.getElementById("modal-address").value.trim();
+        const city = document.getElementById("modal-city").value.trim();
+        const postalCode = document.getElementById("modal-postal-code").value.trim();
+        const country = document.getElementById("modal-country").value.trim();
+
+        if (address) updatedData.address = address;
+        if (city) updatedData.city = city;
+        if (postalCode) updatedData.postalCode = postalCode;
+        if (country) updatedData.country = country;
+
+        try {
+            await updateDoc(userRef, updatedData);
+            showToast("Shipping address updated successfully!", false);
+            hideModal("shipping-modal");
+            loadUserProfile(); // Refresh profile data after saving
+        } catch (error) {
+            console.error("Error updating shipping address:", error);
+            showToast("Failed to update shipping address. Please try again.", true);
+        }
+    } else if (section === "billing") {
+        const cardHolderName = document.getElementById("modal-card-holder").value.trim();
+        const cardNumber = document.getElementById("modal-card-number").value.trim();
+        const expiry = document.getElementById("modal-expiry").value.trim();
+        const cvv = document.getElementById("modal-cvv").value.trim();
+
+        if (!validateCardNumber(cardNumber)) {
+            showToast("Invalid card number. It should be 16 digits.", true);
+            return;
+        }
+
+        if (!validateCVV(cvv)) {
+            showToast("Invalid CVV. It should be 3-4 digits.", true);
+            return;
+        }
+
+        updatedData.billingCard = { cardHolderName, cardNumber, expiry, cvv };
+
+        try {
+            await updateDoc(userRef, updatedData);
+            showToast("Billing details updated successfully!", false);
+            hideModal("billing-modal");
+            loadUserProfile(); // Refresh profile data after saving
+        } catch (error) {
+            console.error("Error updating billing details:", error);
+            showToast("Failed to update billing details. Please try again.", true);
         }
     }
-
-    // Additional logic for shipping and billing can be added here as needed
 }
 
 // Attach functions to the global window object
