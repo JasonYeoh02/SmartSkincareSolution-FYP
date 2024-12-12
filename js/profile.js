@@ -9,7 +9,7 @@ import {
     getDocs,
     updateEmail,
   } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";  
-import { auth, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 // Firestore initialization
 const db = getFirestore();
