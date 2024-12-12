@@ -119,9 +119,19 @@ async function saveChanges(section) {
         const email = document.getElementById("modal-email").value.trim();
         const contact = document.getElementById("modal-contact").value.trim();
 
-        if (email && !validateEmail(email)) {
-            showToast("Invalid email format.", true);
-            return;
+        if (email && email !== user.email) {
+            try {
+                // Update email without requiring verification
+                await updateEmail(user, email);
+        
+                // Update the Firestore record to sync with the new email
+                await updateDoc(userRef, { email });
+        
+                showToast("Email updated successfully!", false);
+            } catch (error) {
+                console.error("Error updating email:", error);
+                showToast("Failed to update email. Please try again.", true);
+            }
         }
 
         if (contact && !validatePhoneNumber(contact)) {
