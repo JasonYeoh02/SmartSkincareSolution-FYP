@@ -1,5 +1,10 @@
 import { auth } from "./firebase-config.js";
-import { onAuthStateChanged, updateEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { 
+    onAuthStateChanged, 
+    updateEmail, 
+    reauthenticateWithCredential, 
+    EmailAuthProvider 
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
     getFirestore,
     doc,
@@ -114,18 +119,23 @@ async function saveChanges(section) {
     const userRef = doc(db, "users", user.uid);
     const updatedData = {};
 
-           if (email && email !== user.email) {
+    if (section === "profile") {
+        const username = document.getElementById("modal-username").value.trim();
+        const email = document.getElementById("modal-email").value.trim();
+        const contact = document.getElementById("modal-contact").value.trim();
+
+        if (email && email !== user.email) {
             try {
-                // Reauthenticate the user
-                const credential = EmailAuthProvider.credential(user.email, "demo-password"); // Replace "demo-password" with the user's password or a placeholder for the demo.
+                // Reauthenticate the user (using a demo password for demo purposes)
+                const credential = EmailAuthProvider.credential(user.email, "demo-password");
                 await reauthenticateWithCredential(user, credential);
-        
+
                 // Update the email
                 await updateEmail(user, email);
-        
+
                 // Update the email in Firestore
                 await updateDoc(userRef, { email });
-        
+
                 showToast("Email updated successfully!", false);
             } catch (error) {
                 console.error("Error updating email:", error);
@@ -133,7 +143,7 @@ async function saveChanges(section) {
                 return;
             }
         }
-        
+
         if (contact && !validatePhoneNumber(contact)) {
             showToast("Invalid phone number. It should be 10-11 digits.", true);
             return;
@@ -143,19 +153,10 @@ async function saveChanges(section) {
         if (contact) updatedData.contact = contact;
 
         try {
-            // Update Firestore data first
             await updateDoc(userRef, updatedData);
-
-            // Update email only if it's different from the current email
-            if (email && email !== user.email) {
-                await user.updateEmail(email); // Update email in Firebase Auth
-                await user.sendEmailVerification(); // Send verification email to the new email address
-                showToast("Email updated! Please verify the new email.", false);
-            }
-
             showToast("Profile updated successfully!", false);
             hideModal("profile-modal");
-            loadUserProfile(); // Refresh profile data after saving
+            loadUserProfile();
         } catch (error) {
             console.error("Error updating profile:", error);
             showToast("Failed to update profile. Please try again.", true);
@@ -175,7 +176,7 @@ async function saveChanges(section) {
             await updateDoc(userRef, updatedData);
             showToast("Shipping address updated successfully!", false);
             hideModal("shipping-modal");
-            loadUserProfile(); // Refresh profile data after saving
+            loadUserProfile();
         } catch (error) {
             console.error("Error updating shipping address:", error);
             showToast("Failed to update shipping address. Please try again.", true);
@@ -202,7 +203,7 @@ async function saveChanges(section) {
             await updateDoc(userRef, updatedData);
             showToast("Billing details updated successfully!", false);
             hideModal("billing-modal");
-            loadUserProfile(); // Refresh profile data after saving
+            loadUserProfile();
         } catch (error) {
             console.error("Error updating billing details:", error);
             showToast("Failed to update billing details. Please try again.", true);
