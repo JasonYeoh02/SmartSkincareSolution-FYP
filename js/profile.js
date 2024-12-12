@@ -119,11 +119,18 @@ async function saveChanges(section) {
         const email = document.getElementById("modal-email").value.trim();
         const contact = document.getElementById("modal-contact").value.trim();
 
-        if (email && !validateEmail(email)) {
-            showToast("Invalid email format.", true);
-            return;
+        if (email && email !== user.email) {
+            try {
+                await updateEmail(user, email); // Correct way to update the email
+                await user.sendEmailVerification(); // Send verification email
+                showToast("Email updated! Please verify the new email.", false);
+            } catch (error) {
+                console.error("Error updating email:", error);
+                showToast("Failed to update email. Please try again.", true);
+                return;
+            }
         }
-
+        
         if (contact && !validatePhoneNumber(contact)) {
             showToast("Invalid phone number. It should be 10-11 digits.", true);
             return;
