@@ -1,4 +1,4 @@
-import { auth } from "./firebase-config.js";
+import { auth, EmailAuthProvider, reauthenticateWithCredential, updateEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
     getFirestore,
@@ -8,8 +8,6 @@ import {
     collection,
     getDocs,
   } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";  
-import { updateEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-
 
 // Firestore initialization
 const db = getFirestore();
@@ -123,20 +121,26 @@ async function saveChanges(section) {
 
         if (email && email !== user.email) {
             try {
+                // Prompt for reauthentication (use a demo password if necessary)
+                const currentPassword = prompt("Please enter your current password for reauthentication (demo-password for demo):");
+                const credential = EmailAuthProvider.credential(user.email, currentPassword);
+                await reauthenticateWithCredential(user, credential);
+
                 // Update the email in Firebase Authentication
                 await updateEmail(user, email);
-        
+
                 // Update the Firestore record
                 await updateDoc(userRef, { email });
-        
-                // Force re-sign-in for synchronization (using fake credentials since this is a demo)
-                await auth.signOut();
-                await auth.signInWithEmailAndPassword(email, 'demo-password');
-        
-                showToast("Email updated and re-synced successfully!", false);
+
+                showToast("Email updated successfully! Please verify your new email.", false);
             } catch (error) {
-                console.error("Error updating email:", error);
-                showToast("Failed to update email in Firebase Authentication. Please try again.", true);
+                if (error.code === "auth/requires-recent-login") {
+                    showToast("Please log in again to update your email.", true);
+                } else {
+                    console.error("Error updating email:", error);
+                    showToast("Failed to update email. Please try again.", true);
+                }
+                return;
             }
         }
 
@@ -146,7 +150,6 @@ async function saveChanges(section) {
         }
 
         if (username) updatedData.username = username;
-        if (email) updatedData.email = email;
         if (contact) updatedData.contact = contact;
 
     } else if (section === "shipping") {
@@ -181,7 +184,7 @@ async function saveChanges(section) {
 
     try {
         await updateDoc(userRef, updatedData);
-        showToast(`${section} information saved successfully!`);
+        showToast(`${section} information saved successfully!`, false);
         hideModal(`${section}-modal`);
         loadUserProfile(); // Refresh profile data after saving
     } catch (error) {
