@@ -49,7 +49,7 @@ function validateEmail(email) {
 }
 
 function validatePhoneNumber(phoneNumber) {
-    const phoneRegex = /^\d{10,15}$/;
+    const phoneRegex = /^\d{10,11}$/;
     return phoneRegex.test(phoneNumber);
 }
 
@@ -209,15 +209,6 @@ window.showBillingModal = showBillingModal; // Attach to the global window objec
 window.saveChanges = saveChanges;
 window.showModal = showModal;
 window.hideModal = hideModal;
-
-// Monitor auth state and initialize display
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        loadUserProfile();
-    } else {
-        window.location.href = "/html/login.html";
-    }
-});
 
 async function loadUserAppointments() {
     const user = auth.currentUser;
