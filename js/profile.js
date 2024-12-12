@@ -121,20 +121,18 @@ async function saveChanges(section) {
 
         if (email && email !== user.email) {
             try {
-                // Update the email
+                // Force update the email without verification
                 await updateEmail(user, email);
         
-                // Update the email in Firestore
+                // Update the email in Firestore immediately
                 await updateDoc(userRef, { email });
         
-                showToast("Email updated successfully!", false);
+                showToast("Email successfully updated.", false);
             } catch (error) {
+                console.error("Error updating email:", error);
                 if (error.code === "auth/requires-recent-login") {
                     showToast("Please log in again to update your email.", true);
-                } else if (error.code === "auth/operation-not-allowed") {
-                    showToast("Email verification is required. Check your email inbox.", true);
                 } else {
-                    console.error("Error updating email:", error);
                     showToast("Failed to update email. Please try again.", true);
                 }
                 return;
