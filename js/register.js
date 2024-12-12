@@ -29,6 +29,12 @@ function showNotification(message, type = "success") {
     }, 3000);
 }
 
+// Contact number validation function
+function isValidContactNumber(contact) {
+    const contactRegex = /^\d{10,11}$/; // Only digits, and length between 10 to 11
+    return contactRegex.test(contact);
+}
+
 // Friendly messages based on Firebase error codes
 function getFriendlyErrorMessage(errorCode) {
     const errorMessages = {
@@ -49,6 +55,12 @@ function registerUser() {
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirm-password").value;
 
+    // Validate contact number
+    if (!isValidContactNumber(contact)) {
+        showNotification("Contact number must be 10 to 11 digits long.", "error");
+        return;
+    }
+    
     // Basic validation
     if (password !== confirmPassword) {
         showNotification("Passwords do not match.", "error");
